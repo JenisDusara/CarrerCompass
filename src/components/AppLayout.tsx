@@ -64,8 +64,8 @@ function AppSidebar() {
         <SidebarMenu>
           {navItems.map((item) => (
             <SidebarMenuItem key={item.href}>
-              <Link href={item.href} passHref>
-                <SidebarMenuButton asChild isActive={pathname === item.href} tooltip={item.label}>
+              <Link href={item.href} passHref legacyBehavior>
+                <SidebarMenuButton as="a" isActive={pathname === item.href} tooltip={item.label}>
                   <item.icon />
                   <span>{item.label}</span>
                 </SidebarMenuButton>
@@ -75,8 +75,8 @@ function AppSidebar() {
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter>
-        <Link href="/" passHref>
-          <SidebarMenuButton asChild tooltip="Logout">
+        <Link href="/" passHref legacyBehavior>
+          <SidebarMenuButton as="a" tooltip="Logout">
             <LogOut />
             <span>Logout</span>
           </SidebarMenuButton>
