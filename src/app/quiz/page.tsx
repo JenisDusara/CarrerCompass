@@ -11,39 +11,39 @@ import { cn } from '@/lib/utils';
 
 const quizQuestions = [
   {
-    question: "When starting a new project, what's your first instinct?",
+    question: "A train running at the speed of 60 km/hr crosses a pole in 9 seconds. What is the length of the train?",
     options: [
-      { id: 'a', text: 'Create a detailed plan and timeline.' },
-      { id: 'b', text: 'Brainstorm creative and unconventional ideas.' },
-      { id: 'c', text: 'Assemble a team and delegate tasks.' },
-      { id: 'd', text: 'Dive right in and start experimenting.' },
+      { id: 'a', text: '120 metres' },
+      { id: 'b', text: '150 metres' },
+      { id: 'c', text: '180 metres' },
+      { id: 'd', text: '200 metres' },
     ],
   },
   {
-    question: 'You feel most energized in a work environment that is:',
+    question: "A, B and C can do a piece of work in 20, 30 and 60 days respectively. In how many days can A do the work if he is assisted by B and C on every third day?",
     options: [
-      { id: 'a', text: 'Structured and predictable.' },
-      { id: 'b', text: 'Dynamic and fast-paced.' },
-      { id: 'c', text: 'Collaborative and social.' },
-      { id: 'd', text: 'Independent and autonomous.' },
+      { id: 'a', text: '12 days' },
+      { id: 'b', text: '15 days' },
+      { id: 'c', text: '16 days' },
+      { id: 'd', text: '18 days' },
     ],
   },
   {
-    question: 'Which of these tasks sounds most appealing?',
+    question: "Look at this series: 7, 10, 8, 11, 9, 12, ... What number should come next?",
     options: [
-      { id: 'a', text: 'Analyzing data to find trends.' },
-      { id: 'b', text: 'Designing a visually stunning presentation.' },
-      { id: 'c', text: 'Mentoring a junior team member.' },
-      { id: 'd', text: 'Negotiating a high-stakes deal.' },
+      { id: 'a', text: '7' },
+      { id: 'b', text: '10' },
+      { id: 'c', text: '12' },
+      { id: 'd', text: '13' },
     ],
   },
   {
-    question: 'When faced with a difficult problem, you are more likely to:',
+    question: "A man buys a cycle for 1400 and sells it at a loss of 15%. What is the selling price of the cycle?",
     options: [
-      { id: 'a', text: 'Rely on proven methods and logic.' },
-      { id: 'b', text: 'Think outside the box for a novel solution.' },
-      { id: 'c', text: 'Seek input and advice from others.' },
-      { id: 'd', text: 'Trust your intuition and take decisive action.' },
+      { id: 'a', text: '1190' },
+      { id: 'b', text: '1160' },
+      { id: 'c', text: '1202' },
+      { id: 'd', text: '1000' },
     ],
   },
 ];
@@ -85,7 +85,8 @@ export default function QuizPage() {
   }
 
   const getResult = () => {
-    if (answers.length === 0) {
+    if (answers.length !== quizQuestions.length) {
+      // Default to a personality type if the quiz is not complete
       return personalityTypes.a;
     }
     
