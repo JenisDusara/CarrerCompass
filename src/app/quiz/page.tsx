@@ -6,8 +6,17 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
-import { CheckCircle, Award, BarChart, Users } from 'lucide-react';
+import { CheckCircle, Award, Timer, ArrowLeft, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 
 const allQuizQuestions = [
   {
@@ -106,7 +115,7 @@ const allQuizQuestions = [
           { id: 'a', text: '4.2' },
           { id: 'b', text: '6.8' },
           { id: 'c', text: '5.8' },
-          { id: 'd', text: '4.8' }
+          { id: 'd', 'text': '4.8' }
       ],
       answer: 'c'
   },
@@ -243,10 +252,10 @@ const allQuizQuestions = [
   {
       question: "If the price of a book is first decreased by 25% and then increased by 20%, then the net change in the price will be :",
       options: [
-          { id: 'a', text: '10' },
-          { id: 'b', text: '20' },
-          { id: 'c', text: '30' },
-          { id: 'd', text: '40' }
+          { id: 'a', text: '-10%' },
+          { id: 'b', text: '20%' },
+          { id: 'c', text: '10%' },
+          { id: 'd', text: '-20%' }
       ],
       answer: 'a'
   },
@@ -324,18 +333,40 @@ const allQuizQuestions = [
 
 
 const QUIZ_LENGTH = 30;
+const QUIZ_TIME_LIMIT = 20 * 60; // 20 minutes in seconds
 
 export default function QuizPage() {
-  const [quizQuestions, setQuizQuestions] = useState<typeof allQuizQuestions>([]);
+  const [quizQuestions, setQuizQuestions] = useState<(typeof allQuizQuestions)>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [answers, setAnswers] = useState<string[]>([]);
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [answers, setAnswers] = useState<(string | null)[]>([]);
   const [showResult, setShowResult] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(QUIZ_TIME_LIMIT);
+  const [isTimeUp, setIsTimeUp] = useState(false);
 
   useEffect(() => {
     const shuffled = [...allQuizQuestions].sort(() => 0.5 - Math.random());
+    const initialAnswers = new Array(QUIZ_LENGTH).fill(null);
     setQuizQuestions(shuffled.slice(0, QUIZ_LENGTH));
+    setAnswers(initialAnswers);
   }, []);
+  
+  useEffect(() => {
+    if (quizQuestions.length > 0 && !showResult) {
+      const timer = setInterval(() => {
+        setTimeLeft((prevTime) => {
+          if (prevTime <= 1) {
+            clearInterval(timer);
+            setIsTimeUp(true);
+            setShowResult(true);
+            return 0;
+          }
+          return prevTime - 1;
+        });
+      }, 1000);
+
+      return () => clearInterval(timer);
+    }
+  }, [quizQuestions, showResult]);
 
   if (quizQuestions.length === 0) {
     return (
@@ -348,29 +379,37 @@ export default function QuizPage() {
     );
   }
 
-  const progress = ((currentQuestionIndex) / quizQuestions.length) * 100;
-  const isLastQuestion = currentQuestionIndex === quizQuestions.length - 1;
+  const progress = ((currentQuestionIndex + 1) / quizQuestions.length) * 100;
 
   const handleNext = () => {
-    if (selectedOption) {
-      const newAnswers = [...answers, selectedOption];
-      setAnswers(newAnswers);
-      setSelectedOption(null);
-      if (isLastQuestion) {
-        setShowResult(true);
-      } else {
-        setCurrentQuestionIndex(currentQuestionIndex + 1);
-      }
+    if (currentQuestionIndex < quizQuestions.length - 1) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
+    } else {
+      setShowResult(true);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex(currentQuestionIndex - 1);
     }
   };
   
+  const handleAnswerChange = (value: string) => {
+    const newAnswers = [...answers];
+    newAnswers[currentQuestionIndex] = value;
+    setAnswers(newAnswers);
+  };
+
   const handleRestart = () => {
     const shuffled = [...allQuizQuestions].sort(() => 0.5 - Math.random());
+    const initialAnswers = new Array(QUIZ_LENGTH).fill(null);
     setQuizQuestions(shuffled.slice(0, QUIZ_LENGTH));
+    setAnswers(initialAnswers);
     setCurrentQuestionIndex(0);
-    setAnswers([]);
-    setSelectedOption(null);
     setShowResult(false);
+    setTimeLeft(QUIZ_TIME_LIMIT);
+    setIsTimeUp(false);
   }
 
   const getResult = () => {
@@ -385,6 +424,10 @@ export default function QuizPage() {
   
   const result = getResult();
   const scorePercentage = (result / quizQuestions.length) * 100;
+  
+  const minutes = Math.floor(timeLeft / 60);
+  const seconds = timeLeft % 60;
+
 
   return (
     <div className="space-y-8 flex flex-col items-center">
@@ -397,30 +440,56 @@ export default function QuizPage() {
         {!showResult ? (
           <>
             <CardHeader>
-              <Progress value={progress} className="w-full mb-4" />
+              <div className="flex justify-between items-center mb-4">
+                <Progress value={progress} className="w-full" />
+                <div className="flex items-center ml-4">
+                  <Timer className="h-5 w-5 mr-2" />
+                  <span className="font-semibold">{minutes}:{seconds < 10 ? `0${seconds}` : seconds}</span>
+                </div>
+              </div>
               <CardTitle>Question {currentQuestionIndex + 1}/{quizQuestions.length}</CardTitle>
               <CardDescription className="text-lg pt-2">{quizQuestions[currentQuestionIndex].question}</CardDescription>
             </CardHeader>
             <CardContent>
               <RadioGroup
-                onValueChange={setSelectedOption}
-                value={selectedOption || ''}
+                onValueChange={handleAnswerChange}
+                value={answers[currentQuestionIndex] || ''}
                 className="space-y-4"
               >
                 {quizQuestions[currentQuestionIndex].options.map((option) => (
-                  <div key={option.id} className={cn("flex items-center space-x-2 p-4 rounded-md border transition-all", selectedOption === option.id ? "bg-accent/20 border-accent" : "hover:bg-muted/50")}>
+                  <div key={option.id} className={cn("flex items-center space-x-2 p-4 rounded-md border transition-all", answers[currentQuestionIndex] === option.id ? "bg-accent/20 border-accent" : "hover:bg-muted/50")}>
                     <RadioGroupItem value={option.id} id={option.id} />
                     <Label htmlFor={option.id} className="text-base flex-1 cursor-pointer">{option.text}</Label>
                   </div>
                 ))}
               </RadioGroup>
-              <Button onClick={handleNext} disabled={!selectedOption} className="mt-8 w-full">
-                {isLastQuestion ? 'Finish Quiz' : 'Next Question'}
-              </Button>
+              <div className="mt-8 flex justify-between w-full">
+                <Button onClick={handlePrevious} disabled={currentQuestionIndex === 0}>
+                  <ArrowLeft className="mr-2" />
+                  Previous
+                </Button>
+                 <Button onClick={handleNext}>
+                  {currentQuestionIndex === quizQuestions.length - 1 ? 'Finish Quiz' : 'Next / Skip'}
+                  <ArrowRight className="ml-2" />
+                </Button>
+              </div>
             </CardContent>
           </>
         ) : (
           <CardContent className="text-center p-8">
+             <AlertDialog open={isTimeUp} onOpenChange={setIsTimeUp}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                    <AlertDialogTitle>Time's Up!</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        Your time for the quiz has run out. Your answers have been submitted automatically.
+                    </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                    <AlertDialogAction onClick={() => setIsTimeUp(false)}>View Results</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
             <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
             <h2 className="text-2xl font-bold font-headline">Quiz Complete!</h2>
             <p className="text-muted-foreground mb-6">Here is your result:</p>
