@@ -13,11 +13,6 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-let app;
-if (getApps().length === 0) {
-    app = initializeApp(firebaseConfig);
-} else {
-    app = getApp();
-}
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
