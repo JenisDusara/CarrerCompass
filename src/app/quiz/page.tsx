@@ -430,82 +430,110 @@ export default function QuizPage() {
 
 
   return (
-    <div className="space-y-8 flex flex-col items-center">
+    <div className="space-y-8">
       <div className="text-center">
         <h1 className="text-3xl font-bold font-headline">Aptitude Quiz</h1>
         <p className="text-muted-foreground">Discover your work style and personality.</p>
       </div>
 
-      <Card className="w-full max-w-2xl shadow-lg">
-        {!showResult ? (
-          <>
-            <CardHeader>
-              <div className="flex justify-between items-center mb-4">
-                <Progress value={progress} className="w-full" />
-                <div className="flex items-center ml-4">
-                  <Timer className="h-5 w-5 mr-2" />
-                  <span className="font-semibold">{minutes}:{seconds < 10 ? `0${seconds}` : seconds}</span>
-                </div>
-              </div>
-              <CardTitle>Question {currentQuestionIndex + 1}/{quizQuestions.length}</CardTitle>
-              <CardDescription className="text-lg pt-2">{quizQuestions[currentQuestionIndex].question}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <RadioGroup
-                onValueChange={handleAnswerChange}
-                value={answers[currentQuestionIndex] || ''}
-                className="space-y-4"
-              >
-                {quizQuestions[currentQuestionIndex].options.map((option) => (
-                  <div key={option.id} className={cn("flex items-center space-x-2 p-4 rounded-md border transition-all", answers[currentQuestionIndex] === option.id ? "bg-accent/20 border-accent" : "hover:bg-muted/50")}>
-                    <RadioGroupItem value={option.id} id={option.id} />
-                    <Label htmlFor={option.id} className="text-base flex-1 cursor-pointer">{option.text}</Label>
+      <div className="flex flex-col lg:flex-row gap-8 items-start">
+        <Card className="w-full lg:w-3/4 shadow-lg">
+          {!showResult ? (
+            <>
+              <CardHeader>
+                <div className="flex justify-between items-center mb-4">
+                  <Progress value={progress} className="w-full" />
+                  <div className="flex items-center ml-4 shrink-0">
+                    <Timer className="h-5 w-5 mr-2" />
+                    <span className="font-semibold">{minutes}:{seconds < 10 ? `0${seconds}` : seconds}</span>
                   </div>
-                ))}
-              </RadioGroup>
-              <div className="mt-8 flex justify-between w-full">
-                <Button onClick={handlePrevious} disabled={currentQuestionIndex === 0}>
-                  <ArrowLeft className="mr-2" />
-                  Previous
-                </Button>
-                 <Button onClick={handleNext}>
-                  {currentQuestionIndex === quizQuestions.length - 1 ? 'Finish Quiz' : 'Next / Skip'}
-                  <ArrowRight className="ml-2" />
-                </Button>
+                </div>
+                <CardTitle>Question {currentQuestionIndex + 1}/{quizQuestions.length}</CardTitle>
+                <CardDescription className="text-lg pt-2">{quizQuestions[currentQuestionIndex].question}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <RadioGroup
+                  onValueChange={handleAnswerChange}
+                  value={answers[currentQuestionIndex] || ''}
+                  className="space-y-4"
+                >
+                  {quizQuestions[currentQuestionIndex].options.map((option) => (
+                    <div key={option.id} className={cn("flex items-center space-x-2 p-4 rounded-md border transition-all", answers[currentQuestionIndex] === option.id ? "bg-accent/20 border-accent" : "hover:bg-muted/50")}>
+                      <RadioGroupItem value={option.id} id={option.id} />
+                      <Label htmlFor={option.id} className="text-base flex-1 cursor-pointer">{option.text}</Label>
+                    </div>
+                  ))}
+                </RadioGroup>
+                <div className="mt-8 flex justify-between w-full">
+                  <Button onClick={handlePrevious} disabled={currentQuestionIndex === 0}>
+                    <ArrowLeft className="mr-2" />
+                    Previous
+                  </Button>
+                   <Button onClick={handleNext}>
+                    {currentQuestionIndex === quizQuestions.length - 1 ? 'Finish Quiz' : 'Next / Skip'}
+                    <ArrowRight className="ml-2" />
+                  </Button>
+                </div>
+              </CardContent>
+            </>
+          ) : (
+            <CardContent className="text-center p-8 flex flex-col items-center justify-center min-h-[400px]">
+               <AlertDialog open={isTimeUp} onOpenChange={setIsTimeUp}>
+                  <AlertDialogContent>
+                      <AlertDialogHeader>
+                      <AlertDialogTitle>Time's Up!</AlertDialogTitle>
+                      <AlertDialogDescription>
+                          Your time for the quiz has run out. Your answers have been submitted automatically.
+                      </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                      <AlertDialogAction onClick={() => setIsTimeUp(false)}>View Results</AlertDialogAction>
+                      </AlertDialogFooter>
+                  </AlertDialogContent>
+              </AlertDialog>
+              <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
+              <h2 className="text-2xl font-bold font-headline">Quiz Complete!</h2>
+              <p className="text-muted-foreground mb-6">Here is your result:</p>
+              
+              <div className="bg-accent/10 p-6 rounded-lg">
+                <Award className="h-12 w-12 text-primary mx-auto mb-3" />
+                <h3 className="text-3xl font-bold text-primary">You scored {result} out of {quizQuestions.length}</h3>
+                <p className="text-lg mt-2">That's {scorePercentage.toFixed(2)}%!</p>
               </div>
-            </CardContent>
-          </>
-        ) : (
-          <CardContent className="text-center p-8">
-             <AlertDialog open={isTimeUp} onOpenChange={setIsTimeUp}>
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                    <AlertDialogTitle>Time's Up!</AlertDialogTitle>
-                    <AlertDialogDescription>
-                        Your time for the quiz has run out. Your answers have been submitted automatically.
-                    </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                    <AlertDialogAction onClick={() => setIsTimeUp(false)}>View Results</AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
-            <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold font-headline">Quiz Complete!</h2>
-            <p className="text-muted-foreground mb-6">Here is your result:</p>
-            
-            <div className="bg-accent/10 p-6 rounded-lg">
-              <Award className="h-12 w-12 text-primary mx-auto mb-3" />
-              <h3 className="text-3xl font-bold text-primary">You scored {result} out of {quizQuestions.length}</h3>
-              <p className="text-lg mt-2">That's {scorePercentage.toFixed(2)}%!</p>
-            </div>
 
-            <Button onClick={handleRestart} className="mt-8">
-              Take Again
-            </Button>
-          </CardContent>
+              <Button onClick={handleRestart} className="mt-8">
+                Take Again
+              </Button>
+            </CardContent>
+          )}
+        </Card>
+
+        {!showResult && (
+          <Card className="w-full lg:w-1/4 shadow-lg sticky top-24">
+            <CardHeader>
+                <CardTitle>Questions</CardTitle>
+            </CardHeader>
+            <CardContent className="grid grid-cols-5 gap-2">
+                {quizQuestions.map((_, index) => (
+                    <Button
+                        key={index}
+                        variant={
+                            currentQuestionIndex === index
+                            ? 'default'
+                            : answers[index]
+                            ? 'secondary'
+                            : 'outline'
+                        }
+                        className="h-10 w-10 p-0"
+                        onClick={() => setCurrentQuestionIndex(index)}
+                    >
+                        {index + 1}
+                    </Button>
+                ))}
+            </CardContent>
+          </Card>
         )}
-      </Card>
+      </div>
     </div>
   );
 }
