@@ -556,6 +556,7 @@ const SidebarMenuButton = React.forwardRef<
     const { isMobile, state } = useSidebar()
 
     const button = (
+      // @ts-expect-error - `as` prop is not typed correctly
       <Comp
         ref={ref}
         data-sidebar="menu-button"

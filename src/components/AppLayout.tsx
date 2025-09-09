@@ -64,23 +64,24 @@ function AppSidebar() {
         <SidebarMenu>
           {navItems.map((item) => (
             <SidebarMenuItem key={item.href}>
-              <Link href={item.href} passHref legacyBehavior>
-                <SidebarMenuButton as="a" isActive={pathname === item.href} tooltip={item.label}>
-                  <item.icon />
-                  <span>{item.label}</span>
-                </SidebarMenuButton>
-              </Link>
+              <SidebarMenuButton
+                as={Link}
+                href={item.href}
+                isActive={pathname === item.href}
+                tooltip={item.label}
+              >
+                <item.icon />
+                <span>{item.label}</span>
+              </SidebarMenuButton>
             </SidebarMenuItem>
           ))}
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter>
-        <Link href="/" passHref legacyBehavior>
-          <SidebarMenuButton as="a" tooltip="Logout">
-            <LogOut />
-            <span>Logout</span>
-          </SidebarMenuButton>
-        </Link>
+        <SidebarMenuButton as={Link} href="/" tooltip="Logout">
+          <LogOut />
+          <span>Logout</span>
+        </SidebarMenuButton>
       </SidebarFooter>
     </Sidebar>
   );
@@ -139,12 +140,12 @@ function UserMenu() {
         <DropdownMenuItem>Profile</DropdownMenuItem>
         <DropdownMenuItem>Settings</DropdownMenuItem>
         <DropdownMenuSeparator />
-        <Link href="/" passHref>
-          <DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/">
             <LogOut className="mr-2 h-4 w-4" />
             Logout
-          </DropdownMenuItem>
-        </Link>
+          </Link>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
