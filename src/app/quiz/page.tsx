@@ -85,6 +85,10 @@ export default function QuizPage() {
   }
 
   const getResult = () => {
+    if (answers.length === 0) {
+      return personalityTypes.a;
+    }
+    
     const counts = answers.reduce((acc, answer) => {
       acc[answer] = (acc[answer] || 0) + 1;
       return acc;
