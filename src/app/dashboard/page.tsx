@@ -1,8 +1,29 @@
 import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, BarChart, BotMessageSquare, Compass, Lightbulb, User } from 'lucide-react';
+import { ArrowRight, BarChart, BotMessageSquare, Compass, Lightbulb, User, History } from 'lucide-react';
 import Image from 'next/image';
+
+const recentActivities = [
+  {
+    icon: Lightbulb,
+    description: 'You completed the Aptitude Quiz.',
+    time: '2 hours ago',
+    href: '/quiz',
+  },
+  {
+    icon: Compass,
+    description: 'You generated a new career roadmap for "Product Manager".',
+    time: '1 day ago',
+    href: '/roadmap',
+  },
+  {
+    icon: BarChart,
+    description: 'You explored careers related to "Creative Writing".',
+    time: '3 days ago',
+    href: '/explore',
+  },
+];
 
 export default function DashboardPage() {
   return (
@@ -91,6 +112,33 @@ export default function DashboardPage() {
                 Take the Quiz
               </Button>
             </Link>
+          </CardContent>
+        </Card>
+
+        <Card className="col-span-1 md:col-span-3 shadow-md hover:shadow-lg transition-shadow">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">Recent Activity</CardTitle>
+            <History className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {recentActivities.map((activity, index) => (
+                <div key={index} className="flex items-start gap-4">
+                  <div className="bg-muted rounded-full p-2">
+                    <activity.icon className="h-5 w-5 text-muted-foreground" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm">{activity.description}</p>
+                    <p className="text-xs text-muted-foreground">{activity.time}</p>
+                  </div>
+                  <Link href={activity.href} passHref>
+                    <Button variant="ghost" size="sm">
+                      View <ArrowRight className="ml-1 h-4 w-4" />
+                    </Button>
+                  </Link>
+                </div>
+              ))}
+            </div>
           </CardContent>
         </Card>
       </div>
