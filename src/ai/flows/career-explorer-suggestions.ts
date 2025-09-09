@@ -31,6 +31,11 @@ const CareerExplorerSuggestionsOutputSchema = z.object({
       jobDescription: z.string().describe('A description of the job.'),
       requiredSkills: z.array(z.string()).describe('The skills required for the job.'),
       averageSalary: z.string().optional().describe('The average salary for the job in the specified locality, if available.'),
+      onlineCourses: z.array(z.object({
+        courseName: z.string().describe('The name of the online course.'),
+        platform: z.string().describe('The platform offering the course (e.g., Coursera, Udemy).'),
+        url: z.string().url().describe('A placeholder URL to the course.'),
+      })).describe('A list of suggested online courses from platforms like Coursera or Udemy. Use placeholder URLs.'),
     })
   ).describe('A list of career suggestions based on the user interests.'),
 });
@@ -68,11 +73,11 @@ const prompt = ai.definePrompt({
   tools: [getSalaryInformation],
   prompt: `Based on the user's interests: {{{userInterests}}}, suggest several possible career paths. 
 
-For each career path, provide a job title, a brief job description, and a list of required skills.
+For each career path, provide a job title, a brief job description, a list of required skills, and a list of 2-3 relevant online courses from platforms like Coursera or Udemy.
 
 If the user provided a locality: {{{locality}}}, use the getSalaryInformation tool to retrieve and include the average salary for the job in that locality.
 
-Return the results as a JSON object.`,
+Return the results as a JSON object. For course URLs, provide placeholder links like https://www.coursera.org/search?query=...`,
 });
 
 const careerExplorerSuggestionsFlow = ai.defineFlow(

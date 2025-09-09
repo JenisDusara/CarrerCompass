@@ -10,7 +10,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { careerExplorerSuggestions, type CareerExplorerSuggestionsOutput } from '@/ai/flows/career-explorer-suggestions';
-import { Loader2, Zap } from 'lucide-react';
+import { Loader2, Zap, GraduationCap, ExternalLink } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 const formSchema = z.object({
@@ -107,13 +107,18 @@ export default function CareerExplorerPage() {
                 <div className="h-6 bg-muted rounded w-3/4"></div>
                 <div className="h-4 bg-muted rounded w-full mt-2"></div>
               </CardHeader>
-              <CardContent className="space-y-2">
+              <CardContent className="space-y-4">
                 <div className="h-4 bg-muted rounded w-1/4"></div>
                 <div className="flex flex-wrap gap-2">
                   <div className="h-6 w-20 bg-muted rounded-full"></div>
                   <div className="h-6 w-24 bg-muted rounded-full"></div>
                   <div className="h-6 w-16 bg-muted rounded-full"></div>
                 </div>
+                 <div className="h-4 bg-muted rounded w-1/4 mt-4"></div>
+                 <div className="space-y-2">
+                    <div className="h-4 bg-muted rounded w-full"></div>
+                    <div className="h-4 bg-muted rounded w-5/6"></div>
+                 </div>
               </CardContent>
               <CardFooter>
                  <div className="h-8 bg-muted rounded w-1/2"></div>
@@ -133,21 +138,38 @@ export default function CareerExplorerPage() {
                   <CardTitle>{suggestion.jobTitle}</CardTitle>
                   <CardDescription>{suggestion.jobDescription}</CardDescription>
                 </CardHeader>
-                <CardContent className="flex-grow">
-                  <h4 className="font-semibold mb-2">Required Skills</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {suggestion.requiredSkills.map((skill, i) => (
-                      <Badge key={i} variant="secondary">{skill}</Badge>
-                    ))}
+                <CardContent className="flex-grow space-y-4">
+                  <div>
+                    <h4 className="font-semibold mb-2">Required Skills</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {suggestion.requiredSkills.map((skill, i) => (
+                        <Badge key={i} variant="secondary">{skill}</Badge>
+                      ))}
+                    </div>
                   </div>
+                   {suggestion.onlineCourses && suggestion.onlineCourses.length > 0 && (
+                    <div>
+                        <h4 className="font-semibold mb-2 flex items-center gap-2"><GraduationCap className="h-5 w-5"/> Recommended Courses</h4>
+                        <ul className="space-y-2">
+                        {suggestion.onlineCourses.map((course, i) => (
+                            <li key={i} className="text-sm">
+                                <a href={course.url} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline flex items-center gap-2">
+                                   {course.courseName} <span className="text-muted-foreground">({course.platform})</span>
+                                   <ExternalLink className="h-4 w-4 shrink-0" />
+                                </a>
+                            </li>
+                        ))}
+                        </ul>
+                    </div>
+                    )}
                 </CardContent>
-                {suggestion.averageSalary && (
-                  <CardFooter>
-                    <p className="text-sm text-muted-foreground font-medium">
-                      Average Salary: <span className="text-primary">{suggestion.averageSalary}</span>
-                    </p>
-                  </CardFooter>
-                )}
+                <CardFooter className="flex-wrap items-center justify-between gap-2">
+                    {suggestion.averageSalary && (
+                        <p className="text-sm text-muted-foreground font-medium">
+                        Avg. Salary: <span className="text-primary">{suggestion.averageSalary}</span>
+                        </p>
+                    )}
+                </CardFooter>
               </Card>
             ))}
           </div>
