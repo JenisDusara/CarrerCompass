@@ -10,8 +10,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import { findJobsAndIdeas, type JobSearchOutput } from '@/ai/flows/job-search-and-ideas';
-import { Loader2, Search, Lightbulb, ExternalLink, Building2 } from 'lucide-react';
+import { findJobs, type JobSearchOutput } from '@/ai/flows/job-search-and-ideas';
+import { Loader2, Search, ExternalLink, Building2 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 
 const formSchema = z.object({
@@ -37,7 +37,7 @@ export default function JobSearchPage() {
     setIsLoading(true);
     setResults(null);
     try {
-      const response = await findJobsAndIdeas(values);
+      const response = await findJobs(values);
       setResults(response);
     } catch (error) {
       console.error('Failed to get job search results:', error);
@@ -55,13 +55,13 @@ export default function JobSearchPage() {
     <div className="space-y-8">
       <div>
         <h1 className="text-3xl font-bold font-headline">Job Search</h1>
-        <p className="text-muted-foreground">Find your next opportunity and get inspired with project ideas.</p>
+        <p className="text-muted-foreground">Find your next opportunity.</p>
       </div>
 
       <Card className="shadow-md">
         <CardHeader>
           <CardTitle>Search for Your Next Role</CardTitle>
-          <CardDescription>Fill in the details below to find jobs and related project ideas.</CardDescription>
+          <CardDescription>Fill in the details below to find jobs.</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -132,11 +132,6 @@ export default function JobSearchPage() {
                 <div className="h-6 bg-muted rounded w-1/2"></div>
             </CardHeader>
             <CardContent className="space-y-6">
-                <div className="space-y-2">
-                    <div className="h-4 bg-muted rounded w-1/4"></div>
-                    <div className="h-4 bg-muted rounded w-full"></div>
-                    <div className="h-4 bg-muted rounded w-5/6"></div>
-                </div>
                  <div className="space-y-2">
                     <div className="h-4 bg-muted rounded w-1/4"></div>
                     <div className="h-8 bg-muted rounded w-1/3 mt-2"></div>
@@ -153,16 +148,8 @@ export default function JobSearchPage() {
           </CardHeader>
           <CardContent className="space-y-6">
             <div>
-              <h3 className="text-xl font-semibold flex items-center gap-2 mb-3"><Lightbulb className="text-primary"/> Project Ideas</h3>
-              <ul className="list-disc list-inside space-y-2 pl-2 text-muted-foreground">
-                {results.projectIdeas.map((idea, index) => (
-                  <li key={index}>{idea}</li>
-                ))}
-              </ul>
-            </div>
-            <Separator />
-            <div>
                 <h3 className="text-xl font-semibold flex items-center gap-2 mb-3"><Building2 className="text-primary"/> Live Job Openings</h3>
+                <p className="text-muted-foreground mb-4">Click the links below to see live job listings on popular platforms.</p>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     {results.hiringLinks.map((link, index) => (
                         <a href={link.url} target="_blank" rel="noopener noreferrer" key={index}>
