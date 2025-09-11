@@ -2,11 +2,12 @@
 'use client';
 
 import { GoogleAuthProvider, signInWithPopup, getAuth } from 'firebase/auth';
+import { initializeApp, getApps, getApp } from 'firebase/app';
 import { useRouter } from 'next/navigation';
 import { Button } from './ui/button';
 import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
-import { app } from '@/lib/firebase'; // Import the initialized app
+import { firebaseConfig } from '@/lib/firebase'; // Import the config
 
 export default function GoogleSignInButton() {
   const router = useRouter();
@@ -15,7 +16,9 @@ export default function GoogleSignInButton() {
   const handleSignIn = async () => {
     setIsLoading(true);
     try {
-      const auth = getAuth(app); // Get auth instance using the initialized app
+      // Ensure Firebase is initialized on the client, and only once.
+      const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+      const auth = getAuth(app); // Pass the initialized app to getAuth
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
       router.push('/dashboard');

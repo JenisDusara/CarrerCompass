@@ -1,6 +1,5 @@
 
 import { initializeApp, getApp, getApps, type FirebaseApp } from 'firebase/app';
-import { getAuth, type Auth } from 'firebase/auth';
 
 const firebaseConfig = {
   "projectId": "careercompass-xhdcy",
@@ -13,11 +12,10 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase for client side
-function getFirebaseApp() {
+function getFirebaseApp(): FirebaseApp {
     return !getApps().length ? initializeApp(firebaseConfig) : getApp();
 }
 
 const app = getFirebaseApp();
-const auth = getAuth(app);
 
-export { app, auth };
+export { app, firebaseConfig };
