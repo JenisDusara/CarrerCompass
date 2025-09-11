@@ -1,17 +1,18 @@
+'use client';
 import type { Metadata } from 'next';
 import './globals.css';
 import PageLayout from '@/components/PageLayout';
-
-export const metadata: Metadata = {
-  title: 'CareerCompass',
-  description: 'Your AI-powered career guide.',
-};
+import { useSearchParams } from 'next/navigation';
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // By calling useSearchParams() here, we ensure the searchParams object is
+  // correctly unwrapped for all child components, preventing the Next.js error.
+  useSearchParams();
+  
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
