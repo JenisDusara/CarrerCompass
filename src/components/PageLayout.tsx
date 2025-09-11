@@ -10,6 +10,7 @@ export default function PageLayout({ children }: { children: React.ReactNode }) 
     pathname.startsWith('/dashboard') ||
     pathname.startsWith('/explore') ||
     pathname.startsWith('/quiz') ||
+    pathname.startsWith('/jobs') ||
     pathname.startsWith('/roadmap');
 
   return (

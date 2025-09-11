@@ -13,6 +13,7 @@ import {
   Search,
   User,
   PanelLeft,
+  Briefcase,
 } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
@@ -46,6 +47,7 @@ const navItems = [
   { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
   { href: '/roadmap', icon: Compass, label: 'My Roadmap' },
   { href: '/explore', icon: Search, label: 'Career Explorer' },
+  { href: '/jobs', icon: Briefcase, label: 'Job Search' },
   { href: '/quiz', icon: Lightbulb, label: 'Aptitude Quiz' },
 ];
 
