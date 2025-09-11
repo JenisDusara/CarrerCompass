@@ -513,7 +513,7 @@ export default function QuizPage() {
             </div>
             
             <div>
-              <h3 className="font-semibold mb-3 flex items-center justify-center gap-2"><BookOpen/> Preparation Resources</h3>
+              <h3 className="font-semibold mb-3 flex items-center justify-center gap-2 font-headline"><BookOpen/> Preparation Resources</h3>
               <ul className="space-y-2 text-primary">
                 <li><a href="https://www.indiabix.com/" target="_blank" rel="noopener noreferrer" className="hover:underline">IndiaBIX</a></li>
                 <li><a href="https://www.geeksforgeeks.org/aptitude/aptitude-for-placements/" target="_blank" rel="noopener noreferrer" className="hover:underline">GeeksforGeeks Aptitude</a></li>
@@ -550,7 +550,7 @@ export default function QuizPage() {
                   </div>
                 </div>
                 <div className="flex justify-between items-baseline">
-                    <CardTitle>Question {currentQuestionIndex + 1}/{quizQuestions.length}</CardTitle>
+                    <CardTitle className="font-headline">Question {currentQuestionIndex + 1}/{quizQuestions.length}</CardTitle>
                     <p className='text-sm font-semibold text-primary'>{quizQuestions[currentQuestionIndex].category}</p>
                 </div>
                 <CardDescription className="text-lg pt-2">{quizQuestions[currentQuestionIndex].question}</CardDescription>
@@ -601,7 +601,7 @@ export default function QuizPage() {
               
               <div className="bg-accent/10 p-6 rounded-lg">
                 <Award className="h-12 w-12 text-primary mx-auto mb-3" />
-                <h3 className="text-3xl font-bold text-primary">You scored {result} out of {quizQuestions.length}</h3>
+                <h3 className="text-3xl font-bold text-primary font-headline">You scored {result} out of {quizQuestions.length}</h3>
                 <p className="text-lg mt-2">That's {scorePercentage.toFixed(2)}%!</p>
               </div>
 
@@ -615,7 +615,7 @@ export default function QuizPage() {
         {!showResult && quizQuestions.length > 0 && (
           <Card className="w-full lg:w-1/4 shadow-lg sticky top-24">
             <CardHeader>
-                <CardTitle>Questions</CardTitle>
+                <CardTitle className="font-headline">Questions</CardTitle>
             </CardHeader>
             <CardContent className="grid grid-cols-5 gap-2">
                 {quizQuestions.map((_, index) => (

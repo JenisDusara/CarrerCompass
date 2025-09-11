@@ -56,7 +56,7 @@ export default function DashboardPage() {
             <Compass className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">Product Manager</div>
+            <div className="text-2xl font-bold font-headline">Product Manager</div>
             <p className="text-xs text-muted-foreground">+3 other suggestions</p>
           </CardContent>
           <CardContent>
@@ -95,7 +95,7 @@ export default function DashboardPage() {
             <Lightbulb className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">The Innovator</div>
+            <div className="text-2xl font-bold font-headline">The Innovator</div>
              <p className="text-xs text-muted-foreground">Based on your quiz results</p>
           </CardContent>
           <CardContent>

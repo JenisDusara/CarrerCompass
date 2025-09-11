@@ -60,7 +60,7 @@ export default function RoadmapPage() {
 
       <Card className="shadow-md">
         <CardHeader>
-          <CardTitle>Define Your Destination</CardTitle>
+          <CardTitle className="font-headline">Define Your Destination</CardTitle>
           <CardDescription>What is your ultimate career goal? Be as specific as possible.</CardDescription>
         </CardHeader>
         <CardContent>
@@ -105,7 +105,7 @@ export default function RoadmapPage() {
       {roadmap && (
         <Card className="shadow-md">
           <CardHeader>
-            <CardTitle>Your Custom Roadmap to Success</CardTitle>
+            <CardTitle className="font-headline">Your Custom Roadmap to Success</CardTitle>
             <CardDescription>{roadmap.summary}</CardDescription>
           </CardHeader>
           <CardContent>
@@ -125,7 +125,7 @@ export default function RoadmapPage() {
                     {item.isOptional && (
                         <p className="text-sm font-semibold text-accent mb-4">This step is optional but recommended.</p>
                     )}
-                    <h4 className="font-semibold mb-2 flex items-center gap-2"><BookOpen className="h-4 w-4" /> Learning Resources</h4>
+                    <h4 className="font-semibold mb-2 flex items-center gap-2 font-headline"><BookOpen className="h-4 w-4" /> Learning Resources</h4>
                     <ul className="space-y-2">
                       {item.resources.map((resource, i) => (
                         <li key={i} className="flex items-center">

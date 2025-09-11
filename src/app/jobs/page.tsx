@@ -60,7 +60,7 @@ export default function JobSearchPage() {
 
       <Card className="shadow-md">
         <CardHeader>
-          <CardTitle>Search for Your Next Role</CardTitle>
+          <CardTitle className="font-headline">Search for Your Next Role</CardTitle>
           <CardDescription>Fill in the details below to find jobs.</CardDescription>
         </CardHeader>
         <CardContent>
@@ -143,12 +143,12 @@ export default function JobSearchPage() {
       {results && (
         <Card className="shadow-lg">
           <CardHeader>
-            <CardTitle>Your Custom Results</CardTitle>
+            <CardTitle className="font-headline">Your Custom Results</CardTitle>
             <CardDescription>Based on your search for a {form.getValues('experience')} {form.getValues('jobType')} in {form.getValues('location')}.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div>
-                <h3 className="text-xl font-semibold flex items-center gap-2 mb-3"><Building2 className="text-primary"/> Live Job Openings</h3>
+                <h3 className="text-xl font-semibold flex items-center gap-2 mb-3 font-headline"><Building2 className="text-primary"/> Live Job Openings</h3>
                 <p className="text-muted-foreground mb-4">Click the links below to see live job listings on popular platforms.</p>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     {results.hiringLinks.map((link, index) => (

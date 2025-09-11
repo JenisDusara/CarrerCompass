@@ -58,7 +58,7 @@ export default function CareerExplorerPage() {
 
       <Card className="shadow-md">
         <CardHeader>
-          <CardTitle>Find Your Calling</CardTitle>
+          <CardTitle className="font-headline">Find Your Calling</CardTitle>
           <CardDescription>Tell us what you're passionate about, and our AI will suggest potential career paths.</CardDescription>
         </CardHeader>
         <CardContent>
@@ -135,7 +135,7 @@ export default function CareerExplorerPage() {
             {suggestions.map((suggestion, index) => (
               <Card key={index} className="flex flex-col shadow-md hover:shadow-lg transition-shadow">
                 <CardHeader>
-                  <CardTitle>{suggestion.jobTitle}</CardTitle>
+                  <CardTitle className="font-headline">{suggestion.jobTitle}</CardTitle>
                   <CardDescription>{suggestion.jobDescription}</CardDescription>
                 </CardHeader>
                 <CardContent className="flex-grow space-y-4">
