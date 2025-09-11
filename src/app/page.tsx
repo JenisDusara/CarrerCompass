@@ -7,7 +7,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Logo } from '@/components/Logo';
 import { ArrowRight } from 'lucide-react';
-import GoogleSignInButton from '@/components/GoogleSignInButton';
 import { Separator } from '@/components/ui/separator';
 
 export default function LoginPage() {
@@ -39,12 +38,6 @@ export default function LoginPage() {
                 </Button>
               </Link>
             </form>
-            <div className="my-4 flex items-center">
-              <Separator className="flex-1" />
-              <span className="mx-4 text-xs text-muted-foreground">OR</span>
-              <Separator className="flex-1" />
-            </div>
-            <GoogleSignInButton />
             <div className="mt-4 text-center text-sm">
               Don't have an account?{' '}
               <Link href="#" className="underline text-primary">
