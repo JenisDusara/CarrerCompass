@@ -1,12 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
-import { CheckCircle, Award, Timer, ArrowLeft, ArrowRight } from 'lucide-react';
+import { CheckCircle, Award, Timer, ArrowLeft, ArrowRight, BookOpen } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
   AlertDialog,
@@ -415,8 +416,12 @@ export default function QuizPage() {
   const [showResult, setShowResult] = useState(false);
   const [timeLeft, setTimeLeft] = useState(QUIZ_TIME_LIMIT);
   const [isTimeUp, setIsTimeUp] = useState(false);
+  const [quizStarted, setQuizStarted] = useState(false);
 
-  useEffect(() => {
+  // In a real app, you'd fetch this from localStorage or a database
+  const lastScore = "85%"; 
+
+  const startQuiz = () => {
     // Shuffle all questions and pick the first 30
     const shuffled = [...allQuizQuestions].sort(() => 0.5 - Math.random());
     const selectedQuestions = shuffled.slice(0, QUIZ_LENGTH);
@@ -424,10 +429,15 @@ export default function QuizPage() {
     // Initialize answers array for the selected questions
     const initialAnswers = new Array(selectedQuestions.length).fill(null);
     setAnswers(initialAnswers);
-  }, []);
+    setQuizStarted(true);
+    setCurrentQuestionIndex(0);
+    setShowResult(false);
+    setTimeLeft(QUIZ_TIME_LIMIT);
+    setIsTimeUp(false);
+  };
   
   useEffect(() => {
-    if (quizQuestions.length > 0 && !showResult) {
+    if (quizStarted && quizQuestions.length > 0 && !showResult) {
       const timer = setInterval(() => {
         setTimeLeft((prevTime) => {
           if (prevTime <= 1) {
@@ -442,20 +452,10 @@ export default function QuizPage() {
 
       return () => clearInterval(timer);
     }
-  }, [quizQuestions, showResult]);
+  }, [quizStarted, quizQuestions, showResult]);
 
-  if (quizQuestions.length === 0) {
-    return (
-        <div className="flex justify-center items-center h-screen">
-          <Card className="p-8">
-            <CardTitle>Loading Quiz...</CardTitle>
-            <CardDescription>Please wait while we prepare your questions.</CardDescription>
-          </Card>
-        </div>
-    );
-  }
 
-  const progress = ((currentQuestionIndex + 1) / quizQuestions.length) * 100;
+  const progress = quizQuestions.length > 0 ? ((currentQuestionIndex + 1) / quizQuestions.length) * 100 : 0;
 
   const handleNext = () => {
     if (currentQuestionIndex < quizQuestions.length - 1) {
@@ -478,15 +478,7 @@ export default function QuizPage() {
   };
 
   const handleRestart = () => {
-    const shuffled = [...allQuizQuestions].sort(() => 0.5 - Math.random());
-    const selectedQuestions = shuffled.slice(0, QUIZ_LENGTH);
-    setQuizQuestions(selectedQuestions);
-    const initialAnswers = new Array(selectedQuestions.length).fill(null);
-    setAnswers(initialAnswers);
-    setCurrentQuestionIndex(0);
-    setShowResult(false);
-    setTimeLeft(QUIZ_TIME_LIMIT);
-    setIsTimeUp(false);
+    setQuizStarted(false);
   }
 
   const getResult = () => {
@@ -505,6 +497,38 @@ export default function QuizPage() {
   const minutes = Math.floor(timeLeft / 60);
   const seconds = timeLeft % 60;
 
+
+  if (!quizStarted) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[calc(100vh-200px)]">
+        <Card className="w-full max-w-2xl text-center shadow-lg">
+          <CardHeader>
+            <CardTitle className="text-3xl font-bold font-headline">Aptitude Quiz</CardTitle>
+            <CardDescription className="text-lg">Ready to test your skills?</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="bg-muted p-4 rounded-lg">
+              <p className="text-lg font-semibold">Your Last Score: <span className="text-primary">{lastScore}</span></p>
+              <p className="text-sm text-muted-foreground">Keep practicing to improve!</p>
+            </div>
+            
+            <div>
+              <h3 className="font-semibold mb-3 flex items-center justify-center gap-2"><BookOpen/> Preparation Resources</h3>
+              <ul className="space-y-2 text-primary">
+                <li><a href="https://www.indiabix.com/" target="_blank" rel="noopener noreferrer" className="hover:underline">IndiaBIX</a></li>
+                <li><a href="https://www.geeksforgeeks.org/aptitude/aptitude-for-placements/" target="_blank" rel="noopener noreferrer" className="hover:underline">GeeksforGeeks Aptitude</a></li>
+                <li><a href="https://aptitude-test.com/" target="_blank" rel="noopener noreferrer" className="hover:underline">Aptitude-Test.com</a></li>
+              </ul>
+            </div>
+
+            <Button onClick={startQuiz} size="lg" className="w-full">
+              Start Quiz
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">
@@ -588,7 +612,7 @@ export default function QuizPage() {
           )}
         </Card>
 
-        {!showResult && (
+        {!showResult && quizQuestions.length > 0 && (
           <Card className="w-full lg:w-1/4 shadow-lg sticky top-24">
             <CardHeader>
                 <CardTitle>Questions</CardTitle>
