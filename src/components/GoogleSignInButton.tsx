@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from './ui/button';
 import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
-import { auth } from '@/lib/firebase';
+import { getFirebaseAuth } from '@/lib/firebase';
 
 export default function GoogleSignInButton() {
   const router = useRouter();
@@ -15,6 +15,7 @@ export default function GoogleSignInButton() {
   const handleSignIn = async () => {
     setIsLoading(true);
     try {
+      const auth = getFirebaseAuth();
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
       router.push('/dashboard');

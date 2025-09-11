@@ -1,6 +1,6 @@
 
-import { initializeApp, getApp, getApps } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+import { initializeApp, getApp, getApps, type FirebaseApp } from 'firebase/app';
+import { getAuth, type Auth } from 'firebase/auth';
 
 const firebaseConfig = {
   "projectId": "careercompass-xhdcy",
@@ -12,8 +12,24 @@ const firebaseConfig = {
   "messagingSenderId": "883520662769"
 };
 
-// Initialize Firebase
-const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
-const auth = getAuth(app);
+let app: FirebaseApp;
+let auth: Auth;
 
-export { app, auth };
+function getFirebaseApp() {
+    if (!getApps().length) {
+        app = initializeApp(firebaseConfig);
+    } else {
+        app = getApp();
+    }
+    return app;
+}
+
+
+function getFirebaseAuth() {
+    if (!auth) {
+        auth = getAuth(getFirebaseApp());
+    }
+    return auth;
+}
+
+export { getFirebaseApp, getFirebaseAuth };
