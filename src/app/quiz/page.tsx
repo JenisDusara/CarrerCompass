@@ -36,7 +36,7 @@ const allQuizQuestions = [
     options: [
       { id: 'a', text: '12 days' },
       { id: 'b', text: '15 days' },
-      { id'c', text: '16 days' },
+      { id: 'c', text: '16 days' },
       { id: 'd', text: '18 days' },
     ],
     answer: 'b',
@@ -182,7 +182,7 @@ const allQuizQuestions = [
     question: "The statement that the dazzling sunshine was ________ for my sensitive eyes.",
     options: [
       { id: 'a', text: 'overpowering' },
-      { id'b', text: 'overwhelming' },
+      { id:'b', text: 'overwhelming' },
       { id: 'c', text: 'overbearing' },
       { id: 'd', text: 'overjoyed' }
     ],

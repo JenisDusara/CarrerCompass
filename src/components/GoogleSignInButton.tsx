@@ -1,22 +1,12 @@
+
 'use client';
 
-import { getApp, getApps, initializeApp } from 'firebase/app';
-import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { Button } from './ui/button';
 import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
-
-// This is not best practice, but is necessary to debug the configuration error.
-const firebaseConfig = {
-  "projectId": "careercompass-xhdcy",
-  "appId": "1:883520662769:web:5cea175734f18d4a110d50",
-  "storageBucket": "careercompass-xhdcy.firebasestorage.app",
-  "apiKey": "AIzaSyBq3LmgBpLxhOipoGVCfIn1TZZRrO-hV4o",
-  "authDomain": "careercompass-xhdcy.firebaseapp.com",
-  "measurementId": "",
-  "messagingSenderId": "883520662769"
-};
+import { auth } from '@/lib/firebase';
 
 export default function GoogleSignInButton() {
   const router = useRouter();
@@ -25,8 +15,6 @@ export default function GoogleSignInButton() {
   const handleSignIn = async () => {
     setIsLoading(true);
     try {
-      const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
-      const auth = getAuth(app);
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
       router.push('/dashboard');
