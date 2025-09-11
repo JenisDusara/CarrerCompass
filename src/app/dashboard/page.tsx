@@ -38,9 +38,9 @@ export default function DashboardPage() {
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         <Card className="col-span-1 md:col-span-2 lg:col-span-3 flex flex-col md:flex-row items-center gap-6 p-6 shadow-md hover:shadow-lg transition-shadow">
           <Image
-            src="https://picsum.photos/seed/1/600/400"
+            src="https://picsum.photos/seed/career-chart/600/400"
             alt="Hero image for dashboard"
-            data-ai-hint="office professional"
+            data-ai-hint="career growth"
             width={300}
             height={200}
             className="rounded-lg object-cover"
