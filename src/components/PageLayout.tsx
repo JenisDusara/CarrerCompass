@@ -13,9 +13,29 @@ export default function PageLayout({ children }: { children: React.ReactNode }) 
     pathname.startsWith('/jobs') ||
     pathname.startsWith('/roadmap');
 
+  const isAuthPage = pathname === '/' || pathname === '/signup';
+
+  if (isAppPage) {
+    return (
+      <>
+        <AppLayout>{children}</AppLayout>
+        <Toaster />
+      </>
+    );
+  }
+
+  if (isAuthPage) {
+     return (
+      <>
+        {children}
+        <Toaster />
+      </>
+    );
+  }
+
   return (
     <>
-      {isAppPage ? <AppLayout>{children}</AppLayout> : <>{children}</>}
+      {children}
       <Toaster />
     </>
   );
