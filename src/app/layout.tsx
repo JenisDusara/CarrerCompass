@@ -2,7 +2,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import PageLayout from '@/components/PageLayout';
-import { useSearchParams } from 'next/navigation';
+// import { useSearchParams } from 'next/navigation';
 
 export default function RootLayout({
   children,
@@ -11,7 +11,7 @@ export default function RootLayout({
 }>) {
   // By calling useSearchParams() here, we ensure the searchParams object is
   // correctly unwrapped for all child components, preventing the Next.js error.
-  useSearchParams();
+  // useSearchParams();
   
   return (
     <html lang="en" suppressHydrationWarning>
